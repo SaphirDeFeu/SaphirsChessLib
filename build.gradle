@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+group = 'io.github.saphirdefeu'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+javadoc {
+    destinationDir = file("${buildDir}/docs/javadoc")
+    include 'io/github/saphirdefeu/chesslib'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Built-By'       : 'SaphirDeFeu',
+                'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+                'Created-By'     : "Gradle ${gradle.gradleVersion}",
+                'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+                'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}",
+                'Implementation-Title': "Saphir's Chess Lib",
+                'Implementation-Version': "1.0.0"
+        )
+    }
+}
+
+tasks.register('sourceJar', Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+
+artifacts {
+    archives sourceJar
+}
+
+test {
+    useJUnitPlatform()
+}
